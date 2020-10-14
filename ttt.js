@@ -9,7 +9,8 @@ function initalizeBoard(){
 }
 
 function displayChoice(e){
-  console.log(e.target.innerHTML = "x");
+  e.target.innerHTML = "x";
+  gameBoard.mark("x", e.target.id);
 }
 
 //Code for actual logic of TTT game
@@ -17,7 +18,10 @@ function displayChoice(e){
 const gameBoard = (() => {
   let board = ['', '', '',  '', '', '',  '', '', '']
 
-  return {board}
+  const mark = (player, position) => {
+    board[position] = player;
+  }
+  return {board, mark}
 })();
 
 //player factory function
@@ -31,7 +35,7 @@ const game = (() => {
   const player2 = player('o');
 
   const play = () => {
-    console.log("game is playing")
+    console.log("playing");
   }
   return{play}
 })();
