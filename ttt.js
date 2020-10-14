@@ -12,7 +12,7 @@ function initalizeBoard(){
 function displayGameOver(result){
   const banner = document.getElementById('banner');
   const gameover = document.createElement('div');
-  console.log(result);
+  
   if (result == 'none'){
     const textContent = document.createTextNode("Gameover, no winner.");
     gameover.appendChild(textContent);
@@ -25,18 +25,22 @@ function displayGameOver(result){
 }
 
 function updateGame(e){
-  if (e.target.innerHTML == ""){
-    e.target.innerHTML = game.getCurrentPlayer().symbol;
-    gameBoard.mark(game.getCurrentPlayer().symbol, e.target.id);
-    const result = gameBoard.checkBoard();
+  if(game.playing){
+    if (e.target.innerHTML == ""){
+      e.target.innerHTML = game.getCurrentPlayer().symbol;
+      gameBoard.mark(game.getCurrentPlayer().symbol, e.target.id);
+      const result = gameBoard.checkBoard();
 
-    if ((result == 'x' || result == 'o') || (result == 'none' && game.turnCounter == 8)){
-      displayGameOver(result);
-    }else{
-      game.togglePlayer();
-      game.turnCounter++;
+      if ((result == 'x' || result == 'o') || (result == 'none' && game.turnCounter == 8)){
+        displayGameOver(result);
+        game.playing = false;
+      }else{
+        game.togglePlayer();
+        game.turnCounter++;
+      }
     }
   }
+
 }
 
 //Code for actual logic of TTT game
@@ -82,6 +86,7 @@ const game = (() => {
 
   let currentPlayer = player1;
   let turnCounter = 0;
+  let playing = true;
 
   const togglePlayer = () =>{
     if (currentPlayer == player1) {
@@ -95,7 +100,7 @@ const game = (() => {
   const getCurrentPlayer = () => {
     return currentPlayer;
   }
-  return{getCurrentPlayer, togglePlayer, turnCounter}
+  return{getCurrentPlayer, togglePlayer, turnCounter, playing}
 })();
 
 
