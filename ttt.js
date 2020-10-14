@@ -1,7 +1,7 @@
 
 //Code for DOM manipulation / seting up game board
 function initalizeBoard(){
-  let boxes = document.getElementsByClassName("box");
+  const boxes = document.getElementsByClassName("box");
 
   for(let i = 0; i< boxes.length; i++){
     boxes[i].addEventListener("click", updateGame);
@@ -9,17 +9,29 @@ function initalizeBoard(){
   }
 }
 
-function updateGame(e){
+function displayGameOver(result){
+  const banner = document.getElementById('banner');
+  const gameover = document.createElement('div');
+  console.log(result);
+  if (result == 'none'){
+    const textContent = document.createTextNode("Gameover, no winner.");
+    gameover.appendChild(textContent);
+  }else{
+    const winnerString = "Gameover, " + result + " was the winner.";
+    const textContent = document.createTextNode(winnerString);
+    gameover.appendChild(textContent);
+  }
+  banner.appendChild(gameover);
+}
 
+function updateGame(e){
   if (e.target.innerHTML == ""){
     e.target.innerHTML = game.getCurrentPlayer().symbol;
     gameBoard.mark(game.getCurrentPlayer().symbol, e.target.id);
     const result = gameBoard.checkBoard();
 
-    if (result == 'x' || result == 'o'){
-      console.log("game over");
-    }else if (result == 'none' && game.turnCounter == 8) {
-      console.log("game over, no winner");
+    if ((result == 'x' || result == 'o') || (result == 'none' && game.turnCounter == 8)){
+      displayGameOver(result);
     }else{
       game.togglePlayer();
       game.turnCounter++;
