@@ -9,8 +9,9 @@ function initalizeBoard(){
 }
 
 function displayChoice(e){
-  e.target.innerHTML = "x";
-  gameBoard.mark("x", e.target.id);
+  e.target.innerHTML = game.getCurrentPlayer().symbol;
+  gameBoard.mark(game.getCurrentPlayer().symbol, e.target.id);
+  game.togglePlayer();
 }
 
 //Code for actual logic of TTT game
@@ -34,15 +35,24 @@ const game = (() => {
   const player1 = player('x');
   const player2 = player('o');
 
-  const play = () => {
-    console.log("playing");
+  let currentPlayer = player1;
+
+  const togglePlayer = () =>{
+    if (currentPlayer == player1) {
+      currentPlayer = player2;
+    }
+    else {
+      currentPlayer = player1;
+    }
   }
-  return{play}
+
+  const getCurrentPlayer = () => {
+    return currentPlayer;
+  }
+  return{getCurrentPlayer, togglePlayer}
 })();
 
 
 
 //Running functions
 initalizeBoard();
-
-game.play();
