@@ -14,6 +14,7 @@ function displayChoice(e){
   if (e.target.innerHTML == ""){
     e.target.innerHTML = game.getCurrentPlayer().symbol;
     gameBoard.mark(game.getCurrentPlayer().symbol, e.target.id);
+    gameBoard.checkBoard();
     game.togglePlayer();
   }
 }
@@ -21,12 +22,21 @@ function displayChoice(e){
 //Code for actual logic of TTT game
 //gameboard module
 const gameBoard = (() => {
-  let board = ['', '', '',  '', '', '',  '', '', '']
+  let board = ['', '', '',  '', '', '',  '', '', ''];
+  const xWin = 'xxx';
+  const oWin = 'ooo';
 
   const mark = (player, position) => {
     board[position] = player;
   }
-  return {board, mark}
+
+  const checkBoard = () => {
+    for(let i = 0; i<3; i++){
+      if (board[i] + board[i+3] + board[i+6] == xWin) console.log("X won");
+      else if (board[i] + board[i+3] + board[i+6] == oWin) console.log("O won");
+    }
+  }
+  return {board, mark, checkBoard}
 })();
 
 //player factory function
