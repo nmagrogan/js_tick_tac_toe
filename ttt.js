@@ -5,13 +5,17 @@ function initalizeBoard(){
 
   for(let i = 0; i< boxes.length; i++){
     boxes[i].addEventListener("click", displayChoice);
+    boxes[i].innerHTML = "";
   }
 }
 
 function displayChoice(e){
-  e.target.innerHTML = game.getCurrentPlayer().symbol;
-  gameBoard.mark(game.getCurrentPlayer().symbol, e.target.id);
-  game.togglePlayer();
+
+  if (e.target.innerHTML == ""){
+    e.target.innerHTML = game.getCurrentPlayer().symbol;
+    gameBoard.mark(game.getCurrentPlayer().symbol, e.target.id);
+    game.togglePlayer();
+  }
 }
 
 //Code for actual logic of TTT game
