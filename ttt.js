@@ -37,7 +37,18 @@ const gameBoard = (() => {
       boxes[i].innerHTML = "";
     }
   }
-  return {board, mark, checkBoard, initalize}
+
+  const reset = () => {
+    console.log("hello");
+    board = ['', '', '',  '', '', '',  '', '', ''];
+
+    const boxes = document.getElementsByClassName("box");
+    for(let i = 0; i < boxes.length; i++){
+      boxes[i].innerHTML ="";
+    }
+  }
+
+  return {mark, checkBoard, initalize, reset}
 })();
 
 //player factory function
@@ -75,12 +86,12 @@ const game = (() => {
         gameBoard.mark(game.getCurrentPlayer().symbol, e.target.id);
         const result = gameBoard.checkBoard();
 
-        if ((result == 'x' || result == 'o') || (result == 'none' && game.turnCounter == 8)){
+        if ((result == 'x' || result == 'o') || (result == 'none' && turnCounter == 8)){
           displayGameOver(result);
           playing = false;
         }else{
           game.togglePlayer();
-          game.turnCounter++;
+          turnCounter++;
         }
       }
     }
@@ -98,10 +109,26 @@ const game = (() => {
       const textContent = document.createTextNode(winnerString);
       gameover.appendChild(textContent);
     }
+    const resetButton = document.createElement('button');
+    resetButton.innerHTML = "Play Again?";
+    resetButton.addEventListener('click', reset)
+
     banner.appendChild(gameover);
+    banner.appendChild(resetButton);
   }
 
-  return{getCurrentPlayer, togglePlayer, turnCounter, update}
+  const reset = (e) => {
+    currentPlayer = player1;
+    turnCounter = 0;
+    playing = true;
+    gameBoard.reset();
+    const banner = document.getElementById("banner");
+    while (banner.firstChild) {
+      banner.removeChild(banner.lastChild);
+    }
+  }
+
+  return{getCurrentPlayer, togglePlayer, update}
 })();
 
 gameBoard.initalize();
