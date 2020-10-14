@@ -3,12 +3,18 @@
   grid-template-columns: auto auto auto;
   grid-template-rows: auto auto auto;
 
-  height: 75vh;
-  width: 75vh;
+  height: 90vmin;
+  width: 90vmin;
 
 }
 
 .box{
   border-style: solid;
   border-width: thin;
+
+  height: 30vmin;
+  width: 30vmin;
+
+  font-size: 30vmin;
+  text-align: center;
 }
