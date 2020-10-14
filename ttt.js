@@ -14,10 +14,16 @@ function updateGame(e){
   if (e.target.innerHTML == ""){
     e.target.innerHTML = game.getCurrentPlayer().symbol;
     gameBoard.mark(game.getCurrentPlayer().symbol, e.target.id);
-    gameBoard.checkBoard();
-    game.togglePlayer();
-    game.turnCounter++;
+    const result = gameBoard.checkBoard();
 
+    if (result == 'x' || result == 'o'){
+      console.log("game over");
+    }else if (result == 'none' && game.turnCounter == 8) {
+      console.log("game over, no winner");
+    }else{
+      game.togglePlayer();
+      game.turnCounter++;
+    }
   }
 }
 
@@ -35,17 +41,18 @@ const gameBoard = (() => {
   const checkBoard = () => {
     for(let i = 0; i<3; i++){
       //check verticals
-      if (board[i] + board[i+3] + board[i+6] == xWin) console.log("X won");
-      else if (board[i] + board[i+3] + board[i+6] == oWin) console.log("O won");
+      if (board[i] + board[i+3] + board[i+6] == xWin) return 'x';
+      else if (board[i] + board[i+3] + board[i+6] == oWin) return 'o';
       //check horizonals
-      else if (board[i+(i*2)] + board[(i+1)+(i*2)] + board[(i+2)+(i*2)] == xWin) console.log("X won");
-      else if (board[i+(i*2)] + board[(i+1)+(i*2)] + board[(i+2)+(i*2)] == oWin) console.log("O won");
+      else if (board[i+(i*2)] + board[(i+1)+(i*2)] + board[(i+2)+(i*2)] == xWin) return 'x';
+      else if (board[i+(i*2)] + board[(i+1)+(i*2)] + board[(i+2)+(i*2)] == oWin) return 'o';
     }
     //check diagonals
-    if(board[0]+board[4]+board[8] == xWin) console.log("X won");
-    else if(board[0]+board[4]+board[8] == oWin) console.log("o won");
-    else if(board[2]+board[4]+board[6] == xWin) console.log("x won");
-    else if(board[2]+board[4]+board[6] == oWin) console.log("o won");
+    if(board[0]+board[4]+board[8] == xWin) return 'x';
+    else if(board[0]+board[4]+board[8] == oWin) return 'o';
+    else if(board[2]+board[4]+board[6] == xWin) return 'x';
+    else if(board[2]+board[4]+board[6] == oWin) return 'o';
+    return 'none'
 
   }
   return {board, mark, checkBoard}
