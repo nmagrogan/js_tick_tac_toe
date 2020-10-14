@@ -1,47 +1,4 @@
 
-//Code for DOM manipulation / seting up game board
-function initalizeBoard(){
-  const boxes = document.getElementsByClassName("box");
-
-  for(let i = 0; i< boxes.length; i++){
-    boxes[i].addEventListener("click", updateGame);
-    boxes[i].innerHTML = "";
-  }
-}
-
-function displayGameOver(result){
-  const banner = document.getElementById('banner');
-  const gameover = document.createElement('div');
-  
-  if (result == 'none'){
-    const textContent = document.createTextNode("Gameover, no winner.");
-    gameover.appendChild(textContent);
-  }else{
-    const winnerString = "Gameover, " + result + " was the winner.";
-    const textContent = document.createTextNode(winnerString);
-    gameover.appendChild(textContent);
-  }
-  banner.appendChild(gameover);
-}
-
-function updateGame(e){
-  if(game.playing){
-    if (e.target.innerHTML == ""){
-      e.target.innerHTML = game.getCurrentPlayer().symbol;
-      gameBoard.mark(game.getCurrentPlayer().symbol, e.target.id);
-      const result = gameBoard.checkBoard();
-
-      if ((result == 'x' || result == 'o') || (result == 'none' && game.turnCounter == 8)){
-        displayGameOver(result);
-        game.playing = false;
-      }else{
-        game.togglePlayer();
-        game.turnCounter++;
-      }
-    }
-  }
-
-}
 
 //Code for actual logic of TTT game
 //gameboard module
@@ -71,7 +28,16 @@ const gameBoard = (() => {
     return 'none'
 
   }
-  return {board, mark, checkBoard}
+
+  const initalize = () => {
+    const boxes = document.getElementsByClassName("box");
+
+    for(let i = 0; i< boxes.length; i++){
+      boxes[i].addEventListener("click", game.update);
+      boxes[i].innerHTML = "";
+    }
+  }
+  return {board, mark, checkBoard, initalize}
 })();
 
 //player factory function
@@ -88,6 +54,7 @@ const game = (() => {
   let turnCounter = 0;
   let playing = true;
 
+
   const togglePlayer = () =>{
     if (currentPlayer == player1) {
       currentPlayer = player2;
@@ -100,10 +67,41 @@ const game = (() => {
   const getCurrentPlayer = () => {
     return currentPlayer;
   }
-  return{getCurrentPlayer, togglePlayer, turnCounter, playing}
+
+  const update = (e) => {
+    if(playing){
+      if (e.target.innerHTML == ""){
+        e.target.innerHTML = game.getCurrentPlayer().symbol;
+        gameBoard.mark(game.getCurrentPlayer().symbol, e.target.id);
+        const result = gameBoard.checkBoard();
+
+        if ((result == 'x' || result == 'o') || (result == 'none' && game.turnCounter == 8)){
+          displayGameOver(result);
+          playing = false;
+        }else{
+          game.togglePlayer();
+          game.turnCounter++;
+        }
+      }
+    }
+  }
+
+  const displayGameOver = (result) => {
+    const banner = document.getElementById('banner');
+    const gameover = document.createElement('div');
+
+    if (result == 'none'){
+      const textContent = document.createTextNode("Gameover, no winner.");
+      gameover.appendChild(textContent);
+    }else{
+      const winnerString = "Gameover, " + result + " was the winner.";
+      const textContent = document.createTextNode(winnerString);
+      gameover.appendChild(textContent);
+    }
+    banner.appendChild(gameover);
+  }
+
+  return{getCurrentPlayer, togglePlayer, turnCounter, update}
 })();
 
-
-
-//Running functions
-initalizeBoard();
+gameBoard.initalize();
