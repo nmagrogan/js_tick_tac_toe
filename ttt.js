@@ -4,18 +4,20 @@ function initalizeBoard(){
   let boxes = document.getElementsByClassName("box");
 
   for(let i = 0; i< boxes.length; i++){
-    boxes[i].addEventListener("click", displayChoice);
+    boxes[i].addEventListener("click", updateGame);
     boxes[i].innerHTML = "";
   }
 }
 
-function displayChoice(e){
+function updateGame(e){
 
   if (e.target.innerHTML == ""){
     e.target.innerHTML = game.getCurrentPlayer().symbol;
     gameBoard.mark(game.getCurrentPlayer().symbol, e.target.id);
     gameBoard.checkBoard();
     game.togglePlayer();
+    game.turnCounter++;
+
   }
 }
 
@@ -60,6 +62,7 @@ const game = (() => {
   const player2 = player('o');
 
   let currentPlayer = player1;
+  let turnCounter = 0;
 
   const togglePlayer = () =>{
     if (currentPlayer == player1) {
@@ -73,7 +76,7 @@ const game = (() => {
   const getCurrentPlayer = () => {
     return currentPlayer;
   }
-  return{getCurrentPlayer, togglePlayer}
+  return{getCurrentPlayer, togglePlayer, turnCounter}
 })();
 
 
