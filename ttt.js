@@ -32,9 +32,19 @@ const gameBoard = (() => {
 
   const checkBoard = () => {
     for(let i = 0; i<3; i++){
+      //check verticals
       if (board[i] + board[i+3] + board[i+6] == xWin) console.log("X won");
       else if (board[i] + board[i+3] + board[i+6] == oWin) console.log("O won");
+      //check horizonals
+      else if (board[i+(i*2)] + board[(i+1)+(i*2)] + board[(i+2)+(i*2)] == xWin) console.log("X won");
+      else if (board[i+(i*2)] + board[(i+1)+(i*2)] + board[(i+2)+(i*2)] == oWin) console.log("O won");
     }
+    //check diagonals
+    if(board[0]+board[4]+board[8] == xWin) console.log("X won");
+    else if(board[0]+board[4]+board[8] == oWin) console.log("o won");
+    else if(board[2]+board[4]+board[6] == xWin) console.log("x won");
+    else if(board[2]+board[4]+board[6] == oWin) console.log("o won");
+
   }
   return {board, mark, checkBoard}
 })();
